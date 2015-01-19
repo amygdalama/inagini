@@ -8,8 +8,8 @@ class INaginiSandbox(Protocol):
 
     def connectionMade(self):
         self.process = INaginiSandboxProcess(self)
-        reactor.spawnProcess(self.process, 'python',
-                             args=['python'],
+        reactor.spawnProcess(self.process, 'nagini',
+                             args=['nagini'],
                              usePTY=True, env=os.environ)
 
     def dataReceived(self, stmt):
