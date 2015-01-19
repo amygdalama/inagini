@@ -4,10 +4,10 @@ from twisted.internet import reactor
 from twisted.internet.protocol import Factory, ProcessProtocol, Protocol
 
 
-class INaginiSandbox(Protocol):
+class INagini(Protocol):
 
     def connectionMade(self):
-        self.process = INaginiSandboxProcess(self)
+        self.process = INaginiProcess(self)
         reactor.spawnProcess(self.process, 'nagini',
                              args=['nagini'],
                              usePTY=True, env=os.environ)
@@ -17,7 +17,7 @@ class INaginiSandbox(Protocol):
         self.process.transport.closeStdin()
 
 
-class INaginiSandboxProcess(ProcessProtocol):
+class INaginiProcess(ProcessProtocol):
 
     def __init__(self, server):
         self.server = server
@@ -29,12 +29,12 @@ class INaginiSandboxProcess(ProcessProtocol):
         self.server.transport.write(out)
 
 
-class INaginiSandboxFactory(Factory):
+class INaginiFactory(Factory):
 
     def buildProtocol(self, addr):
-        return INaginiSandbox()
+        return INagini()
 
 
 if __name__ == '__main__':
-    reactor.listenTCP(8007, INaginiSandboxFactory())
+    reactor.listenTCP(8007, INaginiFactory())
     reactor.run()
